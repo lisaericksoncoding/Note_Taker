@@ -1,5 +1,6 @@
 let noteTitle;
 let noteText;
+let noteID;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
@@ -7,6 +8,7 @@ let noteList;
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
+  noteID = document.querySelector('.note-ID');
   saveNoteBtn = document.querySelector('.save-note');
   newNoteBtn = document.querySelector('.new-note');
   noteList = document.querySelectorAll('.list-container .list-group');
@@ -63,6 +65,7 @@ const renderActiveNote = () => {
     noteText.removeAttribute('readonly');
     noteTitle.value = '';
     noteText.value = '';
+    noteID.value = '';
   }
 };
 
@@ -70,6 +73,7 @@ const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
+    id: uuid(),
   };
   saveNote(newNote).then(() => {
     getAndRenderNotes();
@@ -110,7 +114,7 @@ const handleNewNoteView = (e) => {
 
 const handleRenderSaveBtn = () => {
   if (!noteTitle.value.trim() || !noteText.value.trim()) {
-    hide(saveNoteBtn);
+    hide(saveNoteBtn); 
   } else {
     show(saveNoteBtn);
   }
@@ -178,6 +182,7 @@ if (window.location.pathname === '/notes') {
   newNoteBtn.addEventListener('click', handleNewNoteView);
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
+  noteID.addEventListener('keyup', handleRenderSaveBtn);
 }
 
 getAndRenderNotes();
