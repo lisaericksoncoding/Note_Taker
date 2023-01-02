@@ -1,8 +1,9 @@
-const api = require('express').Router();
+const express = require('express');
+const api = express.Router();
 const path = require('path');
 const fs = require('fs');
 // Helper method for generating unique ids
-const uuid = require('./helpers/uuid');
+const uuid = require('uuid');
 
 api.post('/notes', (req, res) => {
     let existingNotes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.json')));
@@ -41,3 +42,4 @@ api.delete('/notes', (req, res) => {
     });
     res.json(existingNotes);
 })
+module.exports = api;

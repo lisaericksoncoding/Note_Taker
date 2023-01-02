@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "express-middleware": "^1.1.0",
     "generate-unique-id": "^2.0.1",
     "inquirer": "^9.1.4",
     "uuid": "^9.0.0"
