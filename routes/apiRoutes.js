@@ -3,7 +3,7 @@ const api = express.Router();
 const path = require('path');
 const fs = require('fs');
 // Helper method for generating unique ids
-const uuid = require('uuid');
+const uuid = require('../helpers/uuid');
 
 api.post('/notes', (req, res) => {
     let existingNotes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.json')));
@@ -13,33 +13,31 @@ api.post('/notes', (req, res) => {
     const newNote = {
         title, 
         text,
-        id: uuid()
+        id: uuid(),
     }
 existingNotes.push(newNote);
 fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(existingNotes));
 res.json(existingNotes);
 }) 
 
-api.get('/notes', (req, res) => {
+api.get('/notes',  (req, res) => {
     let existingNotes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.json')));
     res.json(existingNotes);
 })
 
-api.delete('/notes', (req, res) => {
+api.delete('/notes/:id', (req, res) => {
     let existingNotes = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/db.json')));
-    for (let i = 0; i < existingNotes.length; i++) {
-        if (existingNotes[i].id == req.params.id) {
-            existingNotes.splice(i, 1);
-            break;
-        }
-    }
-    fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(existingNotes), function (err){
+    let noteList = existingNotes.filter(note => {
+        return note.id !== req.params.id
+    })
+    
+    fs.writeFileSync(path.join(__dirname, '../db/db.json'), JSON.stringify(noteList), function (err){
         if (err) {
             return console.log(err);
         } else {
             console.log("Your note has been successfully deleted.")
         }
     });
-    res.json(existingNotes);
+    res.json(noteList);
 })
 module.exports = api;
